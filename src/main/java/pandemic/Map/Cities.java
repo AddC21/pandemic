@@ -1,4 +1,4 @@
-package Pandemic.Map;
+package pandemic.Map;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +62,8 @@ public class Cities {
 
     public static List<City> getAllCities()
     {
-        List<City> allCities = Arrays.asList(
+
+        return Arrays.asList(
             SanFrancisco,
             Chicago,
             Montreal,
@@ -115,7 +116,5 @@ public class Cities {
             Osaka,
             Taipei
         );
-
-        return allCities;
     }
 }

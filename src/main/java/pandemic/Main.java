@@ -1,4 +1,4 @@
-package Pandemic;
+package pandemic;
 
 public class Main {
     public static void main(String[] args)

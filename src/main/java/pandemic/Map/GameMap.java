@@ -1,8 +1,9 @@
-package Pandemic.Map;
+package pandemic.Map;
 
-import static Pandemic.Map.Cities.*;
+import static pandemic.Map.Cities.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class GameMap {
     public static void createDefaultMap() {
@@ -26,7 +27,7 @@ public class GameMap {
         Miami.connections = Arrays.asList(Atlanta, Washington, MexicoCity, Bogota);
         Bogota.connections = Arrays.asList(MexicoCity, Miami, Lima, SaoPaulo, BuenosAires);
         Lima.connections = Arrays.asList(MexicoCity, Bogota, Santiago);
-        Santiago.connections = Arrays.asList(Lima);
+        Santiago.connections = List.of(Lima);
         BuenosAires.connections = Arrays.asList(Bogota, SaoPaulo);
         SaoPaulo.connections = Arrays.asList(Bogota, BuenosAires, Madrid, Lagos);
         Lagos.connections = Arrays.asList(SaoPaulo, Kinshasa, Khartoum);

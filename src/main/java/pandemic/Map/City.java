@@ -1,21 +1,24 @@
-package Pandemic.Map;
+package pandemic.Map;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class City {
+    List<String> colours = Arrays.asList("blue", "yellow", "black", "red");
     public String name;
     public String colour;
     public List<City> connections;
     public List<Integer> cubes;
     public boolean midOutbreak;
-    // Bool hasResearchStation;
+    // boolean hasResearchStation;
 
     public City(String name, String colour) {
         this.name = name;
         this.colour = colour;
-        cubes = Arrays.asList(0, 0, 0, 0);;
+        cubes = Arrays.asList(0, 0, 0, 0);
+        connections = new ArrayList<>();
     }
 
     @Override
@@ -35,8 +38,7 @@ public class City {
 
     public int addCubes(int numOfCubes, int colour, Scanner scanner)
     {
-        System.out.println(name + " just got infected! " + numOfCubes + "  cube(s) added");
-        if (midOutbreak == true)
+        if (midOutbreak)
         {
             return 0;
         }
@@ -49,6 +51,7 @@ public class City {
             if (cubesOfColour < 3)
             {
                 cubes.set(colour, cubesOfColour + 1);
+                System.out.println("1 " + colours.get(colour) + " cube added to " + name + ". Now there are " + cubes.get(colour) + " " + colours.get(colour) + " cubes in " + name + ".");
                 continue;
             }
 
@@ -56,11 +59,12 @@ public class City {
             System.out.println("There has been an outbreak in " + name + "!");
             scanner.nextLine(); // Wait for the user to press Enter
             outbreaks++;
+            midOutbreak = true;
             for (City city : connections)
             {
-                midOutbreak = true;
                 outbreaks += city.addCubes(1, colour, scanner);
             }
+            System.out.println("The outbreak in " + name + " is over.\n");
         }
         // midOutbreak ensures that the outbreaks caused by this city dont cause another here
         midOutbreak = false;

@@ -1,6 +1,6 @@
-package Pandemic.Cards;
+package pandemic.Cards;
 
-import Pandemic.Map.City;
+import pandemic.Map.City;
 
 public class InfectionCard{
     public City city;

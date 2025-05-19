@@ -1,5 +1,5 @@
-package Pandemic;
-import static Pandemic.Map.Cities.Atlanta;
+package pandemic;
+import static pandemic.Map.Cities.Atlanta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import Pandemic.Map.*;
-import Pandemic.Cards.*;
+import pandemic.Map.*;
+import pandemic.Cards.*;
 
 public class Game {
     List<String> colours = Arrays.asList("blue", "yellow", "black", "red");
@@ -89,8 +89,7 @@ public class Game {
 
         // Adds an epidemic card to each section
         List<PlayerCard> completeDeck = new ArrayList<>();
-        for (int i=0; i<splitCityCards.size(); i++) {
-            List<PlayerCard> subdeck = splitCityCards.get(i);
+        for (List<PlayerCard> subdeck : splitCityCards) {
             subdeck.add(new EpidemicCard());
             Collections.shuffle(subdeck);
             completeDeck.addAll(subdeck);
@@ -148,7 +147,7 @@ public class Game {
             
             for (String colour : colours)
             {
-                if (player.cityCards.get(colour).size() == 0) { continue; }
+                if (player.cityCards.get(colour).isEmpty()) { continue; }
                 String colourString = player.cityCards.get(colour).stream().map(cityCard -> cityCard.city.name).collect(Collectors.joining(" (" + colour + "), "));
                 playerLine += colourString + " (" + colour + "), ";
             }
@@ -219,7 +218,7 @@ public class Game {
         for (int i=0; i<numOfCards; i++)
         {
             // Draw card
-            if (playerCards.size() < 1)
+            if (playerCards.isEmpty())
             {
                 System.out.println("\nThe player cards have ran out. You have lost. :(");
                 scanner.nextLine(); // Wait for the user to press Enter

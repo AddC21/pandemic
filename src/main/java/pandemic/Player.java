@@ -1,17 +1,12 @@
-package Pandemic;
+package pandemic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import Pandemic.Cards.CityCard;
-import Pandemic.Cards.PlayerCard;
-import Pandemic.Map.Cities;
-import Pandemic.Map.City;
+import pandemic.Map.Cities;
+import pandemic.Map.City;
+import pandemic.Cards.CityCard;
+import pandemic.Cards.PlayerCard;
 
 public class Player {
     String name;
@@ -89,7 +84,7 @@ public class Player {
         String chosenCityName = scanner.nextLine();
 
         // TODO: Add error handling for not choosing available city
-        City chosenCity = Cities.getAllCities().stream().filter(city -> city.name == chosenCityName).findFirst().orElse(null);
+        City chosenCity = Cities.getAllCities().stream().filter(city -> Objects.equals(city.name, chosenCityName)).findFirst().orElse(null);
 
         if (chosenCity == null)
         {
@@ -120,7 +115,7 @@ public class Player {
     public void shareKnowledge(Scanner scanner, List<Player> otherPlayersInCity)
     {
         // TODO: Add proper handling for invalid inputs
-        if (otherPlayersInCity.size() == 0) // If there is no one else in the city
+        if (otherPlayersInCity.isEmpty()) // If there is no one else in the city
         {
             System.out.println("\nNo one is in " + city + " with you");
             return;
@@ -143,7 +138,7 @@ public class Player {
                         System.out.println("\n" + otherPlayer.name + " [" + i + "]:");
                         for (String colour : colours)
                         {
-                            if (otherPlayer.cityCards.get(colour).size() == 0) { continue; }
+                            if (otherPlayer.cityCards.get(colour).isEmpty()) { continue; }
                             System.out.println(colour + ": " + otherPlayer.cityCards.get(colour).stream().map(cityCard -> cityCard.city.name).collect(Collectors.joining(", ")));
                         }
                     }
@@ -167,7 +162,6 @@ public class Player {
         }
 
         takeCurrentCityCard(scanner, playerWithCityCard);
-        return;
     }
 
     public int discoverCure(Scanner scanner, List<PlayerCard> discardPile)
@@ -177,9 +171,8 @@ public class Player {
         
         // TODO: Handling for if there are no diseases available to cure
         System.out.println("\nWhich colour disease do you want to cure:");
-        for (int i=0; i<availableColours.length; i++)
-        {
-            System.out.println(availableColours[i]);
+        for (String availableColour : availableColours) {
+            System.out.println(availableColour);
         }
 
         String chosenColour = scanner.nextLine();
@@ -288,7 +281,7 @@ public class Player {
         String cardsString = "";
         for (String colour : colours)
         {
-            if (cityCards.get(colour).size() == 0) { continue; }
+            if (cityCards.get(colour).isEmpty()) { continue; }
             String colourString = cityCards.get(colour).stream().map(cityCard -> cityCard.city.name).collect(Collectors.joining(" (" + colour + "), "));
             cardsString += colourString + " (" + colour + "), ";
         }

@@ -1,4 +1,4 @@
-package Pandemic.Cards;
+package pandemic.Cards;
 
 public abstract class PlayerCard {
 }
