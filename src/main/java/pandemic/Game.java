@@ -52,8 +52,9 @@ public class Game {
         players = new ArrayList<>();
         for (int i=0; i<numOfPlayers; i++)
         {
-            players.add(new Player("Player " + i, Atlanta, new ArrayList<>(cityCards.subList(0, 4))));
-            cityCards.subList(0, 4).clear();
+            // Give 2 cards to each player and place them in Atlanta
+            players.add(new Player("Player " + i, Atlanta, new ArrayList<>(cityCards.subList(0, 2))));
+            cityCards.subList(0, 2).clear();
         }
 
         // Then split the deck, add an epidemic card to each section and shuffle before combining
@@ -87,7 +88,7 @@ public class Game {
             splitCityCards.add(new ArrayList<>(cityCards.subList(i, Math.min(i + chunkSize, cityCards.size()))));
         }
 
-        // Adds an epidemic card to each section
+        // Adds an epidemic card to each section, shuffles it and adds it to the new complete deck
         List<PlayerCard> completeDeck = new ArrayList<>();
         for (List<PlayerCard> subdeck : splitCityCards) {
             subdeck.add(new EpidemicCard());

@@ -45,27 +45,31 @@ public class City {
         int outbreaks = 0;
 
         // TODO: might be cleaner without a loop
-        for (int i=0; i<numOfCubes; i++)
-        {
-            int cubesOfColour = cubes.get(colour);
-            if (cubesOfColour < 3)
-            {
-                cubes.set(colour, cubesOfColour + 1);
-                System.out.println("1 " + colours.get(colour) + " cube added to " + name + ". Now there are " + cubes.get(colour) + " " + colours.get(colour) + " cubes in " + name + ".");
-                continue;
-            }
+        int cubesOfColour = cubes.get(colour);
 
-            // if already have 3 cubes of that colour, Outbreak
-            System.out.println("There has been an outbreak in " + name + "!");
-            scanner.nextLine(); // Wait for the user to press Enter
-            outbreaks++;
-            midOutbreak = true;
-            for (City city : connections)
-            {
-                outbreaks += city.addCubes(1, colour, scanner);
-            }
-            System.out.println("The outbreak in " + name + " is over.\n");
+        int cubesCanAdd = numOfCubes;
+        if (cubesOfColour + numOfCubes > 3)
+        {
+            cubesCanAdd = 3 - cubesOfColour;
         }
+
+        cubes.set(colour, cubesOfColour + cubesCanAdd);
+        System.out.println(numOfCubes + " " + colours.get(colour) + " cube(s) added to " + name + ". Now there are " + cubes.get(colour) + " " + colours.get(colour) + " cubes in " + name + ".");
+
+        if (cubesCanAdd == numOfCubes) { return 0; }
+
+        // Else, Outbreak!
+        System.out.println("Can not add any more " + colours.get(colour) + " cube(s) to " + name);
+        System.out.println("There has been an outbreak in " + name + "!");
+        scanner.nextLine();
+        outbreaks++;
+        midOutbreak = true;
+        for (City city : connections)
+        {
+            outbreaks += city.addCubes(1, colour, scanner);
+        }
+        System.out.println("The outbreak in " + name + " is over.\n");
+
         // midOutbreak ensures that the outbreaks caused by this city dont cause another here
         midOutbreak = false;
 
