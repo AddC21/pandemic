@@ -44,7 +44,6 @@ public class City {
         }
         int outbreaks = 0;
 
-        // TODO: might be cleaner without a loop
         int cubesOfColour = cubes.get(colour);
 
         int cubesCanAdd = numOfCubes;
@@ -54,8 +53,9 @@ public class City {
         }
 
         cubes.set(colour, cubesOfColour + cubesCanAdd);
-        System.out.println(numOfCubes + " " + colours.get(colour) + " cube(s) added to " + name + ". Now there are " + cubes.get(colour) + " " + colours.get(colour) + " cubes in " + name + ".");
+        System.out.println(cubesCanAdd + " " + colours.get(colour) + " cube(s) added to " + name + ". Now there are " + cubes.get(colour) + " " + colours.get(colour) + " cubes in " + name + ".");
 
+        // If added all the cubes, that's enough.
         if (cubesCanAdd == numOfCubes) { return 0; }
 
         // Else, Outbreak!

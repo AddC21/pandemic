@@ -138,7 +138,7 @@ public class Game {
                                                 .filter(city -> city.getTotalCubes() > 0)
                                                 .sorted(Comparator.comparing(City::getTotalCubes))
                                                 .collect(Collectors.toList());
-        printCities(sortedCitiesWithCubes);
+        printCities(sortedCitiesWithCubes, activePlayer.city);
 
         System.out.println("\nOther Players:");
         for (Player player : players)
@@ -156,15 +156,17 @@ public class Game {
         }
     }
 
-    private void printCities(List<City> cities)
+    private void printCities(List<City> cities, City currentPlayerCity)
     {
         // Printing table header
-        System.out.printf("%-16s | %-7s %-7s %-7s %-7s%n", "      City      ", " Blue ", "Yellow", " Black ", "  Red  ");
-        System.out.println("-".repeat(50));
+        System.out.printf("%-16s | %-7s %-7s %-7s %-7s| %s%n", "      City      ", " Blue ", "Yellow", " Black ", "  Red  ", "Quickest Route");
+        System.out.println("-".repeat(70));
 
         // Printing city rows
         for (City city : cities) {
-            System.out.printf("%-16s |    %-1d       %-1d       %-1d       %-1d   %n", city.name, city.cubes.get(0), city.cubes.get(1), city.cubes.get(2), city.cubes.get(3));
+            List<City> path = MapUtils.findShortestPath(currentPlayerCity, city);
+            String pathString = MapUtils.formatPath(path);
+            System.out.printf("%-16s |    %-1d       %-1d       %-1d       %-1d   | %s%n", city.name, city.cubes.get(0), city.cubes.get(1), city.cubes.get(2), city.cubes.get(3), pathString);
         }
     }
 

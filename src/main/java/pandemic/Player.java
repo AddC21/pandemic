@@ -26,8 +26,6 @@ public class Player {
         sortCards(dealtCards);
     }
 
-    // TODO: Can probably combine into one method changing the travelToOptions
-
     public void drive(Scanner scanner)
     {
         System.out.println("\nWhich connected city do you want to travel to:");
@@ -131,6 +129,7 @@ public class Player {
             {
                 if(player == this) // If I have the card
                 {
+                    // Choose who to give the card to
                     System.out.println("\nWho do you want to give a card to?");
                     for (int i = 0; i < otherPlayersInCity.size(); i++)
                     {
@@ -148,19 +147,24 @@ public class Player {
 
                     Player chosenPlayer = otherPlayersInCity.get(chosenPlayerInt);
 
+                    // And give them the card then return
                     giveCurrentCityCard(scanner, chosenPlayer);
                     return;
                 }
+
+                // If someone else has the card, save who it is
                 playerWithCityCard = player; // Save as playerWithCityCard
                 break;
             }
         }
 
+        // If no one has the card, flag that
         if (playerWithCityCard == null) {
             System.out.println("\nNo one in " + city + " has the " + city + " card");
             return;
         }
 
+        // Take the card from the player with it
         takeCurrentCityCard(scanner, playerWithCityCard);
     }
 
