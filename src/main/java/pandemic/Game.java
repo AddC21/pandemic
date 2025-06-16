@@ -138,7 +138,7 @@ public class Game {
                                                 .filter(city -> city.getTotalCubes() > 0)
                                                 .sorted(Comparator.comparing(City::getTotalCubes))
                                                 .collect(Collectors.toList());
-        printCities(sortedCitiesWithCubes, activePlayer.city);
+        printCities(sortedCitiesWithCubes, activePlayer);
 
         System.out.println("\nOther Players:");
         for (Player player : players)
@@ -156,17 +156,67 @@ public class Game {
         }
     }
 
-    private void printCities(List<City> cities, City currentPlayerCity)
+    private void printCities(List<City> cities, Player player)
     {
-        // Printing table header
-        System.out.printf("%-16s | %-7s %-7s %-7s %-7s| %s%n", "      City      ", " Blue ", "Yellow", " Black ", "  Red  ", "Quickest Route");
-        System.out.println("-".repeat(70));
+        class CityPathInfo {
+            final City city;
+            final String pathString;
+            final String flightPathString;
 
-        // Printing city rows
+            public CityPathInfo(City city, String pathString, String flightPathString) {
+                this.city = city;
+                this.pathString = pathString;
+                this.flightPathString = flightPathString;
+            }
+        }
+
+        List<CityPathInfo> cityPathInfos = new ArrayList<>();
         for (City city : cities) {
-            List<City> path = MapUtils.findShortestPath(currentPlayerCity, city);
+            List<City> path = MapUtils.findShortestPath(player.city, city);
             String pathString = MapUtils.formatPath(path);
-            System.out.printf("%-16s |    %-1d       %-1d       %-1d       %-1d   | %s%n", city.name, city.cubes.get(0), city.cubes.get(1), city.cubes.get(2), city.cubes.get(3), pathString);
+
+            List<City> flightPath = MapUtils.findShortestPathWithFlights(player.city, city, player.getAllCityCards());
+            String flightPathString = MapUtils.formatPath(flightPath);
+
+            cityPathInfos.add(new CityPathInfo(city, pathString, flightPathString));
+        }
+
+        int pathLength = cityPathInfos.stream()
+                .mapToInt(info -> info.pathString.length())
+                .max()
+                .orElse(0);
+
+        int flightPathLength = cityPathInfos.stream()
+                .mapToInt(info -> info.flightPathString.length())
+                .max()
+                .orElse(0);
+
+        // Print table header with correct format specifiers
+        System.out.printf(
+                "%-16s | %-7s %-7s %-7s %-7s | %-" + pathLength + "s | %-" + flightPathLength + "s%n",
+                "      City      ", " Blue ", "Yellow", " Black ", "  Red  ", "Quickest Connected Route", "Quickest Route With Cards"
+        );
+
+        // Print a separator line
+        System.out.println("-".repeat(56 + pathLength + flightPathLength));
+
+        // Print city rows (assuming city, pathString, flightPathString are defined)
+        // Loop over indexes and print each pair
+        for (CityPathInfo cityPathInfo : cityPathInfos) {
+            String pathString = cityPathInfo.pathString;
+            String flightPathString = cityPathInfo.flightPathString;
+            City city = cityPathInfo.city;
+
+            System.out.printf(
+                    "%-16s |    %-1d       %-1d       %-1d       %-1d    | %-" + pathLength + "s | %-" + flightPathLength + "s%n",
+                    city.name,
+                    city.cubes.get(0),
+                    city.cubes.get(1),
+                    city.cubes.get(2),
+                    city.cubes.get(3),
+                    pathString,
+                    flightPathString
+            );
         }
     }
 
@@ -228,7 +278,7 @@ public class Game {
                 gameOver = true;
                 return true;
             }
-            PlayerCard drawnCard = playerCards.remove(0);
+            PlayerCard drawnCard = playerCards.removeFirst();
             
             
             if (drawnCard instanceof EpidemicCard)
@@ -239,7 +289,7 @@ public class Game {
                 infectionRateIndex++;
 
                 // 2) Draw bottom card from infection deck (so fresh city infected) and give 3 cubes of its colour
-                InfectionCard freshCityCard = infectionCards.remove(infectionCards.size()-1);
+                InfectionCard freshCityCard = infectionCards.removeLast();
                 City freshCity = freshCityCard.city;
                 // TODO: If city's disease eradicated (not just cured), fresh city shouldnt get infected
                 outbreakCounter += freshCity.addCubes(3, colours.indexOf(freshCity.colour), scanner);
@@ -301,7 +351,6 @@ public class Game {
             System.out.println("There have been 8 outbreaks. You have lost. :(");
             scanner.nextLine(); // Wait for the user to press Enter
             gameOver = true;
-            return;
         }
     }
 }

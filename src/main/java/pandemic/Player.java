@@ -185,7 +185,7 @@ public class Player {
         List<CityCard> cityCardsOfChosenColour = cityCards.get(chosenColour);
         for (int i = 0; i < cityCardsOfChosenColour.size(); i++)
         {
-            CityCard card = cityCardsOfChosenColour.remove(0);
+            CityCard card = cityCardsOfChosenColour.removeFirst();
             discardPile.add(card);
         }
 
@@ -222,6 +222,7 @@ public class Player {
 
         if (currentCityCard == null) {
             System.out.println("Error: Could not find a card matching the city " + this.city);
+            return;
         }
 
         receivingPlayer.addCard(scanner, currentCityCard);
@@ -246,6 +247,7 @@ public class Player {
 
         if (currentCityCard == null) {
             System.out.println("Error: " + givingPlayer.name + " does not have a card matching the city " + this.city);
+            return;
         }
 
         addCard(scanner, currentCityCard);
@@ -282,17 +284,17 @@ public class Player {
 
     public void printCards()
     {
-        String cardsString = "";
+        StringBuilder cardsString = new StringBuilder();
         for (String colour : colours)
         {
             if (cityCards.get(colour).isEmpty()) { continue; }
             String colourString = cityCards.get(colour).stream().map(cityCard -> cityCard.city.name).collect(Collectors.joining(" (" + colour + "), "));
-            cardsString += colourString + " (" + colour + "), ";
+            cardsString.append(colourString).append(" (").append(colour).append("), ");
         }
         System.out.println(cardsString.substring(0, cardsString.length() - 2));
     }
 
-    private List<CityCard> getAllCityCards()
+    public List<CityCard> getAllCityCards()
     {
         List<CityCard> allCityCards = new ArrayList<>();
         for (String colour : cityCards.keySet())
