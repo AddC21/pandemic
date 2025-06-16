@@ -95,7 +95,7 @@ public class MapUtils {
         if (path == null || path.isEmpty()) {
             return "Unreachable";
         }
-        return "(" + path.size() + ") " + path.stream()
+        return "(" + (path.size()-1) + ") " + path.stream()
                 .map(City::toString)
                 .reduce((a, b) -> a + " -> " + b)
                 .orElse("");
