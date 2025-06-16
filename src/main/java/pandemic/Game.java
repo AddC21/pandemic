@@ -144,13 +144,13 @@ public class Game {
         for (Player player : players)
         {
             if (player == activePlayer) { continue; }
-            String playerLine = player.name +  " (in " + player.city + ") cards: ";
+            StringBuilder playerLine = new StringBuilder(player.name + " (in " + player.city + ") cards: ");
             
             for (String colour : colours)
             {
                 if (player.cityCards.get(colour).isEmpty()) { continue; }
                 String colourString = player.cityCards.get(colour).stream().map(cityCard -> cityCard.city.name).collect(Collectors.joining(" (" + colour + "), "));
-                playerLine += colourString + " (" + colour + "), ";
+                playerLine.append(colourString).append(" (").append(colour).append("), ");
             }
             System.out.println(playerLine.substring(0, playerLine.length() - 2));
         }
